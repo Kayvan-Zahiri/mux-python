@@ -188,7 +188,8 @@ class ApiClient(object):
                 _preload_content=_preload_content,
                 _request_timeout=_request_timeout)
         except ApiException as e:
-            e.body = e.body.decode('utf-8') if six.PY3 else e.body
+            if six.PY3 and isinstance(e.body, bytes):
+                e.body = e.body.decode('utf-8')
             raise e
 
         self.last_response = response_data
